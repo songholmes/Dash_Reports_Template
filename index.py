@@ -15,7 +15,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import base64
 
-from app import app
+from app import app, server
 
 from pages import page_1, page_2, page_3, page_4, page_5
 
