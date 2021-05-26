@@ -99,8 +99,8 @@ navbar = dbc.Navbar(
     [
          dbc.Row(
                  [
-                     dbc.Col(html.Img(src = 'data:image/png;base64,{}'.format(LOGO_IMG.decode()),
-                                      height = '35px', className = 'd-flex justify-content-center mr-3')),
+                     # dbc.Col(html.Img(src = 'data:image/png;base64,{}'.format(LOGO_IMG.decode()),
+                     #                  height = '35px', className = 'd-flex justify-content-center mr-3')),
                      dbc.Col(dbc.NavbarBrand('Dash', className = 'ml-3'))
                      ],
                  no_gutters = True,
