@@ -171,4 +171,4 @@ page_4.register_callback(app)
 page_5.register_callback(app)
 
 if __name__ == "__main__":
-    app.run_server(port=8888, debug = True)
+    app.run_server(port=3001, debug = False)
