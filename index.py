@@ -143,6 +143,7 @@ app.layout = html.Div(
 #%% ===========================================================================
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
+    print('I am here')
     if pathname == "/":
         return html.P("This is the content of the home page!")
     elif pathname == "/page-1":
@@ -170,4 +171,4 @@ page_4.register_callback(app)
 page_5.register_callback(app)
 
 if __name__ == "__main__":
-    app.run_server(port=8888, debug = False)
+    app.run_server(port=8888, debug = True)
