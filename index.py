@@ -17,7 +17,7 @@ import base64
 
 from app import app, server
 
-from pages import page_1, page_2, page_3, page_4, page_5
+from pages import page_1, page_2, page_3, page_4, page_5, page_input_output
 
 
 
@@ -47,6 +47,7 @@ sidebar = html.Div(
                 dbc.NavLink("Table Interactivity", href="/page-3", active="exact"),
                 dbc.NavLink("Pattern Matching Callback", href="/page-4", active="exact"),
                 dbc.NavLink("Pivot Table ", href="/page-5", active="exact"),
+                dbc.NavLink("Data I/O ", href="/page-IO", active="exact"),
             ],
             vertical=True,
             pills=True,
@@ -156,12 +157,14 @@ def render_page_content(pathname):
         return page_4.layout
     elif pathname == "/page-5":
         return page_5.layout
+    elif pathname == "/page-IO":
+        return page_input_output.layout
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
         [
             html.H1("404: Not found", className="text-danger"),
             html.Hr(),
-            html.P(f"The pathname {pathname} was not recognised..."),
+                html.P(f"The pathname {pathname} was not recognised..."),
         ]
     )
 page_1.register_callback(app)
@@ -169,6 +172,7 @@ page_2.register_callback(app)
 page_3.register_callback(app)
 page_4.register_callback(app)
 page_5.register_callback(app)
+page_input_output.register_callback(app)
 
 if __name__ == "__main__":
     app.run_server(port=3001, debug = False)
