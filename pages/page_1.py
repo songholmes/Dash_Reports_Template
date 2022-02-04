@@ -6,9 +6,7 @@ Created on Sat May 22 20:42:24 2021
 @author: songyang
 """
 import dash
-import dash_core_components as dcc
-import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash import html, dcc, dash_table, Input, Output, State, MATCH, ALL
 import pandas as pd
 import plotly.express as px
 

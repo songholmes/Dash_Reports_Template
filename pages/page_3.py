@@ -7,11 +7,8 @@ Created on Sun May 23 17:23:10 2021
 """
 
 import dash
-from dash.dependencies import Input, Output
-import dash_table
 import dash_bootstrap_components as dbc
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import html, dcc, dash_table, Input, Output, State, MATCH, ALL
 import pandas as pd
 
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder2007.csv')

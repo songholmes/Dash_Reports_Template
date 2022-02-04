@@ -10,14 +10,26 @@ import sys
 sys.path.insert(0, './pages/scripts')
 
 import dash_bootstrap_components as dbc
-import dash_core_components as dcc
-import dash_html_components as html
-from dash.dependencies import Input, Output
+
+from dash import html, dcc, dash_table, Input, Output, State, MATCH, ALL
+
+from dash.exceptions import PreventUpdate
 import base64
 
 from app import app, server
 
 from pages import page_1, page_2, page_3, page_4, page_5, page_input_output
+
+
+# Access Control
+from authlib.integrations.requests_client import OAuth2Session
+import requests
+from requests.structures import CaseInsensitiveDict
+
+
+# Data Mock UP
+import numpy as np
+import pandas as pd
 
 
 
@@ -40,6 +52,28 @@ sidebar = html.Div(
         html.H5("Dash", className = 'd-flex justify-content-center'),
         html.Hr(),
         dbc.Nav(
+            [# Filters
+             html.H5(children = 'Overall Filter', className = 'card-title'),
+             dbc.Row([
+                 # Filter 1
+                 dbc.Col(html.Label('Filter 1: '), className = 'card-text ml-3', width = 0.5),
+                 dbc.Col(
+                     dcc.Dropdown(id ='filter_1_dpn',
+                                  options = [
+                                      {'label': 'option 1', 'value':'OPTION1'},
+                                      {'label': 'option 2', 'value':'OPTION2'},
+                                      ],
+                                  value = 'OPTION1',
+                                  multi = False,
+                                  style = {'font-size':'85%'}
+                                  ),
+                     width = 12
+                                  ),
+                 ]),
+             ]
+            ),
+        html.Br(),
+        dbc.Nav(
             [
                     
                 dbc.NavLink("Simple dropdown and plot", href="/page-1", active="exact"),
@@ -48,6 +82,7 @@ sidebar = html.Div(
                 dbc.NavLink("Pattern Matching Callback", href="/page-4", active="exact"),
                 dbc.NavLink("Pivot Table ", href="/page-5", active="exact"),
                 dbc.NavLink("Data I/O ", href="/page-IO", active="exact"),
+                dbc.NavLink('External Link', href= 'https://www.google.com/', active ='exact',external_link = True, target = '_blank')
             ],
             vertical=True,
             pills=True,
@@ -89,7 +124,7 @@ user_info = dbc.Row(
             className = 'mt-2'
             )
       ],
-    className = 'ml-2 mr-2 d-flex align-content-center align-items-center flex-wrap text-light'
+    className = 'ml-2 mr-2 d-flex align-content-center align-items-center flex-wrap text-light g-0'
     )
 
 #%% ===================== NAVBAR SETTING  ====================================
@@ -135,16 +170,67 @@ content = html.Div(id="page-content", style=CONTENT_STYLE)
 app.layout = html.Div(
     [
          dcc.Location(id="url"),
+         html.Div(id = 'placeholder'),
+         dcc.Store(id = 'data_source_1'),
+         dcc.Store(id = 'valid_access_res'),
          sidebar,
          navbar,
          content,
+         html.Footer('© 2022 Song Holmes', className = 'text-center')
          ]
     )
 
-#%% ===========================================================================
+#%% Client Callback: to get the visitor username
+# app.clientside_callback(
+#     '''
+# function Get(yourUrl){
+#     var Httpreq = new XMLHttpRequest(); // a new request
+#     Httpreq.open("GET", yourUrl, false);
+#     Httpreq.withCredentials = true;
+#     Httpreq.send(null);
+#     return Httpreq.responseText.replaceAll('"', '');
+#     }
+    
+#     ''',
+#     Output('username','children'),
+#     Input('username-url', 'data')
+#     )
+
+
+#%% Overall callbacks
+# @app.callback(
+#     Output('valid_access_res', 'data'),
+#     Input('username', 'children')
+#     )
+# def access_valid(username):
+#     client_id = '',
+#     client_secret = ''
+#     token_url = 'https://..xxx.com/token'
+#     client = OAuth2Session(client_id, client_secret)
+#     allow_access = False
+    
+#     token = client.fetch_token(token_url,
+#                                grant_type = 'client_credentials',
+#                                verify=False)['access_token']
+#     username = username.upper()
+#     headers = CaseInsensitiveDict()
+#     headers['accept'] = 'application/json'
+#     headers['Authorization'] = f'Bearer {token}'
+#     mt_group_list = ['group 1', 'group 2']
+#     for mt_group in mt_group_list:
+#         url = f'https//....'
+#         resp = requests.get(url, headers = headers, verify = False)
+#         if resp.text == '"expected value"':
+#             allow_access = True
+#             break
+#     return allow_access
+    
+
+
+
+
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
-    print('I am here')
     if pathname == "/":
         return html.P("This is the content of the home page!")
     elif pathname == "/page-1":
@@ -167,6 +253,27 @@ def render_page_content(pathname):
                 html.P(f"The pathname {pathname} was not recognised..."),
         ]
     )
+
+
+# Business Callback
+@app.callback(
+    Output('data_source_1','data'),
+    Input('placeholder','children')
+    )
+def data_transition(_):
+    df = pd.DataFrame(data = np.array([[5, 3, 6],
+                                       [4, 5, 6]]),
+                      columns = ['col1', 'col2','col3'])
+    
+    ## For other part to access the output data
+    # data_source_1 = input()
+    # if pd.isnull(data_source_1):
+    #     PreventUpdate()
+    # df = pd.read_json(data_source_1, orient = 'split')
+    
+    return df.to_json(date_format = 'iso',orient='split')
+
+#%% register callback from pages
 page_1.register_callback(app)
 page_2.register_callback(app)
 page_3.register_callback(app)
@@ -175,4 +282,4 @@ page_5.register_callback(app)
 page_input_output.register_callback(app)
 
 if __name__ == "__main__":
-    app.run_server(port=3001, debug = False)
+    app.run_server(port=3001, debug = True)

@@ -8,11 +8,8 @@ Created on Sun May 23 17:32:00 2021
 """
 import dash
 from dash.dependencies import Input, Output
-import dash_table
 import dash_bootstrap_components as dbc
-import dash_core_components as dcc
-import dash_html_components as html
-from dash.dependencies import Input, Output, State, MATCH, ALL
+from dash import html, dcc, dash_table, Input, Output, State, MATCH, ALL
 import pandas as pd
 
 
