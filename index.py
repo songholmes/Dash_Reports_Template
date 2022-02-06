@@ -18,7 +18,7 @@ import base64
 
 from app import app, server
 
-from pages import page_1, page_2, page_3, page_4, page_5, page_input_output
+from pages import page_1, page_3, page_4, page_5, page_input_output, page_dbc
 
 
 # Access Control
@@ -77,12 +77,12 @@ sidebar = html.Div(
             [
                     
                 dbc.NavLink("Simple dropdown and plot", href="/page-1", active="exact"),
-                dbc.NavLink("Multiple Tab", href="/page-2", active="exact"),
                 dbc.NavLink("Table Interactivity", href="/page-3", active="exact"),
                 dbc.NavLink("Pattern Matching Callback", href="/page-4", active="exact"),
                 dbc.NavLink("Pivot Table ", href="/page-5", active="exact"),
                 dbc.NavLink("Data I/O ", href="/page-IO", active="exact"),
-                dbc.NavLink('External Link', href= 'https://www.google.com/', active ='exact',external_link = True, target = '_blank')
+                dbc.NavLink("Bootstrap Lib ", href="/page-dbc", active="exact"),
+                dbc.NavLink('External Link', href= 'https://www.google.com/', active ='exact',external_link = True, target = '_blank'),
             ],
             vertical=True,
             pills=True,
@@ -106,7 +106,6 @@ search_bar = dbc.Row(
                          ),width='auto'
              ),
          ],
-    no_gutters = True,
     className = 'ml-auto flex-nowrap mt-3 mt-md-0',
     align = 'center'
     )
@@ -139,7 +138,6 @@ navbar = dbc.Navbar(
                                        height = '35px', className = 'd-flex justify-content-center mr-3')),
                      dbc.Col(dbc.NavbarBrand('Dash', className = 'ml-3'))
                      ],
-                 no_gutters = True,
                  className = 'ml-4 flex-nowrap mt-3 mt-md-0'
              ),
              
@@ -235,8 +233,6 @@ def render_page_content(pathname):
         return html.P("This is the content of the home page!")
     elif pathname == "/page-1":
         return page_1.layout
-    elif pathname == "/page-2":
-        return page_2.layout
     elif pathname == "/page-3":
         return page_3.layout
     elif pathname == "/page-4":
@@ -245,13 +241,17 @@ def render_page_content(pathname):
         return page_5.layout
     elif pathname == "/page-IO":
         return page_input_output.layout
+    elif pathname == "/page-dbc":
+        return page_dbc.layout
     # If the user tries to reach a different page, return a 404 message
-    return dbc.Jumbotron(
+    return dbc.Container(
         [
-            html.H1("404: Not found", className="text-danger"),
+                html.H1("404: Not found", className="text-danger"),
             html.Hr(),
-                html.P(f"The pathname {pathname} was not recognised..."),
-        ]
+            html.P(f"The pathname {pathname} was not recognised..."),
+        ],
+        fluid=True,
+        className="py-3",
     )
 
 
@@ -275,11 +275,11 @@ def data_transition(_):
 
 #%% register callback from pages
 page_1.register_callback(app)
-page_2.register_callback(app)
 page_3.register_callback(app)
 page_4.register_callback(app)
 page_5.register_callback(app)
 page_input_output.register_callback(app)
+page_dbc.register_callback(app)
 
 if __name__ == "__main__":
-    app.run_server(port=3001, debug = True)
+    app.run_server(port=3002, debug = True)
