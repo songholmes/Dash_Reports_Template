@@ -126,7 +126,6 @@ layout = dbc.Card(
                     dbc.Tab(label="More", tab_id="tab-2"),
                 ],
                 id="card-tabs",
-                card=True,
                 active_tab="tab-1",
             )
         ),
