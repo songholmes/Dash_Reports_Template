@@ -14,5 +14,5 @@ app = dash.Dash(__name__,
                 external_stylesheets=[dbc.themes.BOOTSTRAP, FA],
                 suppress_callback_exceptions=True)
 
-
-server = app.server           
+app.title = 'Dash Reports Template'
+server = app.server
