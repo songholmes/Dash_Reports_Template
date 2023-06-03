@@ -19,7 +19,7 @@ import base64
 
 from app import app, server
 
-from pages import page_1, page_3, page_4, page_5, page_input_output, page_dbc, page_todo_practice
+from pages import page_1, page_3, page_4, page_5, page_input_output, page_dbc, page_todo_practice, page_table_edit_db
 
 # Access Control
 # from authlib.integrations.requests_client import OAuth2Session
@@ -81,7 +81,8 @@ sidebar = html.Div(
                 dbc.NavLink('dbc docs', href='https://dash-bootstrap-components.opensource.faculty.ai/docs/components/',
                             active='exact', external_link=True,
                             target='_blank'),
-                dbc.NavLink('To-Do List Practice', href="/page-todo-practice", active="exact")
+                dbc.NavLink('To-Do List Practice', href="/page-todo-practice", active="exact"),
+                dbc.NavLink('Table Edit w DB', href="/page-table-edit-db", active="exact")
             ],
             vertical=True,
             pills=True,
@@ -168,6 +169,8 @@ app.layout = html.Div(
         dcc.Location(id="url"),
         html.Div(id='placeholder'),
         dcc.Store(id='data_source_1'),
+        dcc.Store(id='db_movie_data'),
+        dcc.Store(id='db_movie_data_updated'),
         dcc.Store(id='valid_access_res'),
         sidebar,
         navbar,
@@ -241,6 +244,8 @@ def render_page_content(pathname):
         return page_dbc.layout
     elif pathname == "/page-todo-practice":
         return page_todo_practice.layout
+    elif pathname == "/page-table-edit-db":
+        return page_table_edit_db.layout
     # If the user tries to reach a different page, return a 404 message
     return dbc.Container(
         [
@@ -280,6 +285,7 @@ page_5.register_callback(app)
 page_input_output.register_callback(app)
 page_dbc.register_callback(app)
 page_todo_practice.register_callback(app)
+page_table_edit_db.register_callback(app)
 
 if __name__ == "__main__":
     app.run_server(port=3002, debug=True)
