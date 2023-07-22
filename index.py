@@ -5,7 +5,7 @@ Created on Sat May 22 20:37:54 2021
 
 @author: songyang
 """
-
+import os
 import sys
 
 sys.path.insert(0, './pages/scripts')
@@ -17,7 +17,7 @@ from dash import html, dcc, dash_table, Input, Output, State, MATCH, ALL
 from dash.exceptions import PreventUpdate
 import base64
 
-from app import app, server
+from app import app, server, auth_app
 
 from pages import page_1, page_3, page_4, page_5, page_input_output, page_dbc, page_todo_practice, page_table_edit_db
 
@@ -121,7 +121,8 @@ user_info = dbc.Row(
             children='User Name',
             id='username',
             className='mt-2'
-        )
+        ),
+        dcc.Link('Log out', href='/logout')
     ],
     className='ms-2 me-2 d-flex align-content-center align-items-center flex-wrap text-light g-0'
 )
@@ -247,6 +248,9 @@ def render_page_content(pathname):
     elif pathname == "/page-table-edit-db":
         return page_table_edit_db.layout
     # If the user tries to reach a different page, return a 404 message
+    elif pathname =="/logout":
+        return dbc.Container([html.H1("Successfully Logout", className="text-danger")]
+    )
     return dbc.Container(
         [
             html.H1("404: Not found", className="text-danger"),
@@ -263,6 +267,17 @@ def render_page_content(pathname):
     Output('data_source_1', 'data'),
     Input('placeholder', 'children')
 )
+
+@app.callback(
+    Output('placeholder', 'children'),
+    Input('url', 'pathname'),
+    prevent_initial_call=True
+)
+def logout(pathname):
+    if pathname == "/logout":
+        auth_app.logout()
+        return ''
+
 def data_transition(_):
     df = pd.DataFrame(data=np.array([[5, 3, 6],
                                      [4, 5, 6]]),
@@ -288,4 +303,6 @@ page_todo_practice.register_callback(app)
 page_table_edit_db.register_callback(app)
 
 if __name__ == "__main__":
+    # Official launched a more neat version for multi-page: https://dash.plotly.com/urls
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # to handle not able to run http
     app.run_server(port=3002, debug=True)
