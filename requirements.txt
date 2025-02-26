@@ -6,7 +6,7 @@ click==8.0.1
 colorama==0.4.6
 dash==2.9.3
 dash-ag-grid==2.1.0
-dash-auth==2.0.0
+dash-auth==2.3.0
 dash-bootstrap-components==1.4.1
 dash-core-components==2.0.0
 dash-html-components==2.0.0

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign-In</title>
+</head>
+<body>
+    <div style="display: flex; flex-direction: column; align-items: center; padding: 2rem; background-color: #f4f7fb; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); width: 300px; margin: auto;">
+        <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: #333;">Choose Your Sign-In Method</h2>
+        <form method="POST" style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+            <label for="idp" style="font-size: 1rem; color: #555;">How do you wish to sign in?</label>
+            <select name="idp" id="idp" style="padding: 0.75rem; font-size: 1rem; border-radius: 4px; border: 1px solid #ccc; background-color: #fff;">
+                <option value="Google">Google</option>
+                <option value="IDP 2">IDP 2</option>
+            </select>
+            <button type="submit" style="padding: 0.75rem; font-size: 1rem; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Login
+            </button>
+        </form>
+    </div>
+</body>
+</html>

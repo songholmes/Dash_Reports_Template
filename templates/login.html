@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Page</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .login-form {
+        background: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        width: 340px;
+    }
+    .login-form h2 {
+        text-align: center;
+        margin: 0 0 20px;
+        color: #333;
+    }
+    .login-form input[type='email'],
+    .login-form input[type='password'] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .login-form input[type='submit'] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #3282b8;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .login-form input[type='submit']:hover {
+        background-color: #0f4c75;
+    }
+
+    .social-login {
+        text-align: center;
+        margin: 20px 0;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+    }
+    .social-login select {
+        margin-left: 10px; /* Spacing between button and select */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .social-login input[type='submit'] {
+        padding: 10px 15px;
+        background-color: #0dac2f;
+        color: white;
+    }
+    .social-login input[type='submit']:hover {
+        background-color: #066a1b;
+    }
+</style>
+</head>
+<body>
+<div class="login-form">
+    <h2>Login</h2>
+    <form>
+        <input type="email" placeholder="Email *" required>
+        <input type="password" placeholder="Password *" required>
+        <input type="submit" value="Login">
+    </form>
+
+    <form>
+        <div class="social-login">
+            <input type="submit" value="Continue with:">
+            <select name="idp" id="idp">
+                <option value="">Select a provider</option>
+                <option value="github">GitHub</option>
+                <option value="google">Google</option>
+                <option value="microsoft">Microsoft</option>
+            </select>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+

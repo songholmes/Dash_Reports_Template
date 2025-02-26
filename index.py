@@ -17,7 +17,7 @@ from dash import html, dcc, dash_table, Input, Output, State, MATCH, ALL
 from dash.exceptions import PreventUpdate
 import base64
 
-from app import app, server, auth_app
+from app import app, server, register_auth_app
 
 from pages import page_1, page_3, page_4, page_5, page_input_output, page_dbc, page_todo_practice, page_table_edit_db
 
@@ -94,37 +94,30 @@ sidebar = html.Div(
 # search bar
 search_bar = dbc.Row(
     [
-        dbc.Col(dbc.Input(type='search', placeholder='Search')),
+        dbc.Col(dbc.Input(type="search", placeholder="Search")),
         dbc.Col(
             dbc.Button(
-                html.Span(
-                    [
-                        html.I(
-                            className="fas fa-search")
-                    ]
-                ), color='secondary', className='ms-2'
-            ), width='auto'
+                html.I(className="fas fa-search"),
+                color="secondary", className="ms-2", n_clicks=0
+            ),
+            width="auto",
         ),
     ],
-    className='ms-auto flex-nowrap mt-3 mt-md-0',
-    align='center'
+    className="g-0 ms-auto flex-nowrap mt-3 mt-md-0",
+    align="center",
 )
+
+
 
 # user info
 user_info = dbc.Row(
-    [dcc.Store(
-        id='username-url',
-        data=''),
-        html.I(
-            className='fas fa-user ml-2 mr-2'),
-        html.Label(
-            children='User Name',
-            id='username',
-            className='mt-2'
-        ),
-        dcc.Link('Log out', href='/logout')
+    [
+        dcc.Store(id='username-url', data=''),
+        dbc.Col(html.I(className='fas fa-user'), width='auto'),
+        dbc.Col(html.Label(children='User Name', id='username', className='mt-1'), width='auto'),
+        # dbc.Col(dcc.Link('Log out', href='/logout', className='ms-2'), width='auto'),
     ],
-    className='ms-2 me-2 d-flex align-content-center align-items-center flex-wrap text-light g-0'
+    className='d-flex align-items-center flex-nowrap text-light g-2'
 )
 
 # %% ===================== NAVBAR SETTING  ====================================
@@ -132,24 +125,32 @@ LOGO_IMG_FILE = r"./assets/img/dash_logo.png"
 LOGO_IMG = base64.b64encode(open(LOGO_IMG_FILE, 'rb').read())
 
 navbar = dbc.Navbar(
-    [
-        dbc.Row(
-            [
-                dbc.Col(html.Img(src='data:image/png;base64,{}'.format(LOGO_IMG.decode()),
-                                 height='35px', className='d-flex justify-content-center me-3')),
-                dbc.Col(dbc.NavbarBrand('Dash', className='ms-3'))
-            ],
-            className='ms-4 flex-nowrap mt-3 mt-md-0'
-        ),
+    dbc.Container(
+        [
+            # Left-side logo and brand
+            dbc.Row(
+                [
+                    dbc.Col(html.Img(src='data:image/png;base64,{}'.format(LOGO_IMG.decode()), height='35px')),
+                    dbc.Col(dbc.NavbarBrand('Dash')),
+                ],
+                align="center",
+                className="g-3",
+            ),
 
-        # search bar
-        search_bar,
-
-        # user_info
-        user_info
-    ],
+            # Right-side search bar and user info (pushed to the right)
+            dbc.Row(
+                [
+                    dbc.Col(search_bar, className='me-1', width=7),  # Search bar
+                    dbc.Col(user_info, width='auto')  # User info
+                ],
+                className="ms-auto d-flex align-items-center",
+                align="center",
+            )
+        ],
+        fluid=True
+    ),
     color='#0091da',
-    dark=True
+    dark=True,
 )
 
 # %% ===================== CONTENT  ===========================================
@@ -248,9 +249,9 @@ def render_page_content(pathname):
     elif pathname == "/page-table-edit-db":
         return page_table_edit_db.layout
     # If the user tries to reach a different page, return a 404 message
-    elif pathname =="/logout":
+    elif pathname == "/logout":
         return dbc.Container([html.H1("Successfully Logout", className="text-danger")]
-    )
+                             )
     return dbc.Container(
         [
             html.H1("404: Not found", className="text-danger"),
@@ -267,17 +268,6 @@ def render_page_content(pathname):
     Output('data_source_1', 'data'),
     Input('placeholder', 'children')
 )
-
-@app.callback(
-    Output('placeholder', 'children'),
-    Input('url', 'pathname'),
-    prevent_initial_call=True
-)
-def logout(pathname):
-    if pathname == "/logout":
-        auth_app.logout()
-        return ''
-
 def data_transition(_):
     df = pd.DataFrame(data=np.array([[5, 3, 6],
                                      [4, 5, 6]]),
@@ -301,6 +291,7 @@ page_input_output.register_callback(app)
 page_dbc.register_callback(app)
 page_todo_practice.register_callback(app)
 page_table_edit_db.register_callback(app)
+register_auth_app(app)
 
 if __name__ == "__main__":
     # Official launched a more neat version for multi-page: https://dash.plotly.com/urls
