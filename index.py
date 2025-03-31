@@ -296,4 +296,4 @@ register_auth_app(app)
 if __name__ == "__main__":
     # Official launched a more neat version for multi-page: https://dash.plotly.com/urls
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # to handle not able to run http
-    app.run_server(port=3002, debug=True)
+    app.run_server(port=3002, debug=False)

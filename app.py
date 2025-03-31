@@ -9,6 +9,9 @@ import dash_bootstrap_components as dbc
 from dash import Dash, html, Input, Output, dcc, no_update
 from dash_auth import OIDCAuth
 from flask import session, redirect, url_for, request, render_template
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
 
 
 FA = "https://use.fontawesome.com/releases/v5.12.1/css/all.css"
@@ -23,7 +26,7 @@ server = app.server
 app.server.secret_key = os.urandom(24)
 
 # Define the email whitelist
-EMAIL_WHITELIST = {"one_user@gmail.com", "another_user@example.com"}
+EMAIL_WHITELIST = {"songyangholmes@gmail.com", "another_user@example.com"}
 
 # Configure OIDC Authentication
 auth = OIDCAuth(

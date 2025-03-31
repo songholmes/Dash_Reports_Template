@@ -10,6 +10,14 @@ import sqlite3 as sl
 
 import dash_bootstrap_components as dbc
 import dash_ag_grid as dag
+import os
+
+db_file_path = os.path.join(os.getcwd(), 'data', 'tutorial.db')
+print(f'Current db file location: {db_file_path}')
+if not os.path.exists(db_file_path):
+    from pages.scripts.generate_initial_db import get_initial_db
+    print(f'Create new db file in {db_file_path}')
+    get_initial_db(db_path=db_file_path)
 
 defaultColDef_ = {"flex": 1, "minWidth": 150, "editable": True}
 dashGridOptions_ = {'pagination': False, "rowSelection": "multiple",
@@ -69,12 +77,14 @@ def register_callback(app):
         Input('db_movie_data_updated', 'data'),
     )
     def load_db_movie_data(_, is_table_updated):
-        con = sl.connect(r".\data\tutorial.db")
-        df = pd.read_sql("select * from movie", con)
-        con.close()
-        print(df)
+        try:
+            con = sl.connect(db_file_path)
+            df = pd.read_sql("select * from movie", con)
+            con.close()
 
-        return df.to_json(date_format='iso', orient='split')
+            return df.to_json(date_format='iso', orient='split')
+        except:
+            PreventUpdate
 
     @app.callback(
         Output('movie_ag_table', 'rowData'),
@@ -126,7 +136,7 @@ def register_callback(app):
     )
     def update_add_delete_actions_to_db(n_clicks, updated_data):
         if n_clicks > 0:
-            con = sl.connect(r".\data\tutorial.db")
+            con = sl.connect(db_file_path)
             df = pd.DataFrame(updated_data)
             df.to_sql('movie', con, if_exists='replace', index=False)
 
